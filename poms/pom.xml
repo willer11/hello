@@ -16,6 +16,30 @@
     <talend.project.name>TEST_DOCKER</talend.project.name>
     <encoding>UTF-8</encoding>
   </properties>
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>dummy4snapshot</id>
+      <url>http://dummy4snapshot</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>dummy4snapshot</id>
+      <url>http://dummy4snapshot</url>
+    </pluginRepository>
+  </pluginRepositories>
   <build>
     <pluginManagement>
       <plugins>
