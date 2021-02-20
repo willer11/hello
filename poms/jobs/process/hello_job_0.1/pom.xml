@@ -8,7 +8,7 @@
     <version>7.3.1</version>
     <relativePath>../../../</relativePath>
   </parent>
-  <groupId>org.example.test_docker.job</groupId>
+  <groupId>com.mehdi.job</groupId>
   <artifactId>hello_job</artifactId>
   <version>0.1.0</version>
   <name>TEST_DOCKER hello_job-0.1.0 (0.1,Job Designs)</name>

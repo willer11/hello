@@ -4,7 +4,6 @@
 	<formats>
 		<format>zip</format>
 	</formats>
-
 	<files>
 		<file> <!-- jobInfo.properties -->
 			<source>${basedir}/src/main/templates/jobInfo_template.properties
