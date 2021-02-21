@@ -231,7 +231,7 @@
             <includes>
                 <include>org.talend.libraries:crypto-utils:jar:6.0.0-SNAPSHOT</include>
                 <include>org.talend.libraries:talend_file_enhanced_20070724:jar:6.0.0</include>
-                <include>example_mehdi.code:routines:jar:7.3.1</include>
+                <include>com.perso.code:routines:jar:7.3.1</include>
             </includes>
             <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
             <useProjectArtifact>false</useProjectArtifact>
@@ -250,7 +250,7 @@
         <dependencySet>
             <outputDirectory>${talend.job.name}</outputDirectory>
             <includes>
-                <include>example_mehdi.job:hello_job:jar:0.1.0</include>
+                <include>com.perso.job:hello_job:jar:0.1.0</include>
             </includes>
             <outputFileNameMapping>${artifact.build.finalName}.${artifact.extension}</outputFileNameMapping>
             <useProjectArtifact>true</useProjectArtifact>
