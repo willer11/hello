@@ -280,7 +280,35 @@ public class hello_job implements TalendJob {
 		tFixedFlowInput_1_onSubJobError(exception, errorComponent, globalMap);
 	}
 
+	public void tFixedFlowInput_2_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
+
+		end_Hash.put(errorComponent, System.currentTimeMillis());
+
+		status = "failure";
+
+		tFixedFlowInput_2_onSubJobError(exception, errorComponent, globalMap);
+	}
+
+	public void tLogRow_2_error(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
+
+		end_Hash.put(errorComponent, System.currentTimeMillis());
+
+		status = "failure";
+
+		tFixedFlowInput_2_onSubJobError(exception, errorComponent, globalMap);
+	}
+
 	public void tFixedFlowInput_1_onSubJobError(Exception exception, String errorComponent,
+			final java.util.Map<String, Object> globalMap) throws TalendException {
+
+		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
+				exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception), "");
+
+	}
+
+	public void tFixedFlowInput_2_onSubJobError(Exception exception, String errorComponent,
 			final java.util.Map<String, Object> globalMap) throws TalendException {
 
 		resumeUtil.addLog("SYSTEM_LOG", "NODE:" + errorComponent, "", Thread.currentThread().getId() + "", "FATAL", "",
@@ -607,6 +635,17 @@ public class hello_job implements TalendJob {
 
 			} // end the resume
 
+			if (resumeEntryMethodName == null || globalResumeTicket) {
+				resumeUtil.addLog("CHECKPOINT", "CONNECTION:SUBJOB_OK:tFixedFlowInput_1:OnSubjobOk", "",
+						Thread.currentThread().getId() + "", "", "", "", "", "");
+			}
+
+			if (execStat) {
+				runStat.updateStatOnConnection("OnSubjobOk1", 0, "ok");
+			}
+
+			tFixedFlowInput_2Process(globalMap);
+
 		} catch (java.lang.Exception e) {
 
 			TalendException te = new TalendException(e, currentComponent, globalMap);
@@ -650,6 +689,370 @@ public class hello_job implements TalendJob {
 		}
 
 		globalMap.put("tFixedFlowInput_1_SUBPROCESS_STATE", 1);
+	}
+
+	public static class row2Struct implements routines.system.IPersistableRow<row2Struct> {
+		final static byte[] commonByteArrayLock_TEST_DOCKER_hello_job = new byte[0];
+		static byte[] commonByteArray_TEST_DOCKER_hello_job = new byte[0];
+
+		public String msg;
+
+		public String getMsg() {
+			return this.msg;
+		}
+
+		private String readString(ObjectInputStream dis) throws IOException {
+			String strReturn = null;
+			int length = 0;
+			length = dis.readInt();
+			if (length == -1) {
+				strReturn = null;
+			} else {
+				if (length > commonByteArray_TEST_DOCKER_hello_job.length) {
+					if (length < 1024 && commonByteArray_TEST_DOCKER_hello_job.length == 0) {
+						commonByteArray_TEST_DOCKER_hello_job = new byte[1024];
+					} else {
+						commonByteArray_TEST_DOCKER_hello_job = new byte[2 * length];
+					}
+				}
+				dis.readFully(commonByteArray_TEST_DOCKER_hello_job, 0, length);
+				strReturn = new String(commonByteArray_TEST_DOCKER_hello_job, 0, length, utf8Charset);
+			}
+			return strReturn;
+		}
+
+		private void writeString(String str, ObjectOutputStream dos) throws IOException {
+			if (str == null) {
+				dos.writeInt(-1);
+			} else {
+				byte[] byteArray = str.getBytes(utf8Charset);
+				dos.writeInt(byteArray.length);
+				dos.write(byteArray);
+			}
+		}
+
+		public void readData(ObjectInputStream dis) {
+
+			synchronized (commonByteArrayLock_TEST_DOCKER_hello_job) {
+
+				try {
+
+					int length = 0;
+
+					this.msg = readString(dis);
+
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+
+				}
+
+			}
+
+		}
+
+		public void writeData(ObjectOutputStream dos) {
+			try {
+
+				// String
+
+				writeString(this.msg, dos);
+
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+		}
+
+		public String toString() {
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(super.toString());
+			sb.append("[");
+			sb.append("msg=" + msg);
+			sb.append("]");
+
+			return sb.toString();
+		}
+
+		/**
+		 * Compare keys
+		 */
+		public int compareTo(row2Struct other) {
+
+			int returnValue = -1;
+
+			return returnValue;
+		}
+
+		private int checkNullsAndCompare(Object object1, Object object2) {
+			int returnValue = 0;
+			if (object1 instanceof Comparable && object2 instanceof Comparable) {
+				returnValue = ((Comparable) object1).compareTo(object2);
+			} else if (object1 != null && object2 != null) {
+				returnValue = compareStrings(object1.toString(), object2.toString());
+			} else if (object1 == null && object2 != null) {
+				returnValue = 1;
+			} else if (object1 != null && object2 == null) {
+				returnValue = -1;
+			} else {
+				returnValue = 0;
+			}
+
+			return returnValue;
+		}
+
+		private int compareStrings(String string1, String string2) {
+			return string1.compareTo(string2);
+		}
+
+	}
+
+	public void tFixedFlowInput_2Process(final java.util.Map<String, Object> globalMap) throws TalendException {
+		globalMap.put("tFixedFlowInput_2_SUBPROCESS_STATE", 0);
+
+		final boolean execStat = this.execStat;
+
+		String iterateId = "";
+
+		String currentComponent = "";
+		java.util.Map<String, Object> resourceMap = new java.util.HashMap<String, Object>();
+
+		try {
+			// TDI-39566 avoid throwing an useless Exception
+			boolean resumeIt = true;
+			if (globalResumeTicket == false && resumeEntryMethodName != null) {
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
+				resumeIt = resumeEntryMethodName.equals(currentMethodName);
+			}
+			if (resumeIt || globalResumeTicket) { // start the resume
+				globalResumeTicket = true;
+
+				row2Struct row2 = new row2Struct();
+
+				/**
+				 * [tLogRow_2 begin ] start
+				 */
+
+				ok_Hash.put("tLogRow_2", false);
+				start_Hash.put("tLogRow_2", System.currentTimeMillis());
+
+				currentComponent = "tLogRow_2";
+
+				if (execStat) {
+					runStat.updateStatOnConnection(resourceMap, iterateId, 0, 0, "row2");
+				}
+
+				int tos_count_tLogRow_2 = 0;
+
+				///////////////////////
+
+				final String OUTPUT_FIELD_SEPARATOR_tLogRow_2 = "|";
+				java.io.PrintStream consoleOut_tLogRow_2 = null;
+
+				StringBuilder strBuffer_tLogRow_2 = null;
+				int nb_line_tLogRow_2 = 0;
+///////////////////////    			
+
+				/**
+				 * [tLogRow_2 begin ] stop
+				 */
+
+				/**
+				 * [tFixedFlowInput_2 begin ] start
+				 */
+
+				ok_Hash.put("tFixedFlowInput_2", false);
+				start_Hash.put("tFixedFlowInput_2", System.currentTimeMillis());
+
+				currentComponent = "tFixedFlowInput_2";
+
+				int tos_count_tFixedFlowInput_2 = 0;
+
+				for (int i_tFixedFlowInput_2 = 0; i_tFixedFlowInput_2 < 1; i_tFixedFlowInput_2++) {
+
+					row2.msg = "Bonjour Mehdi, message 2";
+
+					/**
+					 * [tFixedFlowInput_2 begin ] stop
+					 */
+
+					/**
+					 * [tFixedFlowInput_2 main ] start
+					 */
+
+					currentComponent = "tFixedFlowInput_2";
+
+					tos_count_tFixedFlowInput_2++;
+
+					/**
+					 * [tFixedFlowInput_2 main ] stop
+					 */
+
+					/**
+					 * [tFixedFlowInput_2 process_data_begin ] start
+					 */
+
+					currentComponent = "tFixedFlowInput_2";
+
+					/**
+					 * [tFixedFlowInput_2 process_data_begin ] stop
+					 */
+
+					/**
+					 * [tLogRow_2 main ] start
+					 */
+
+					currentComponent = "tLogRow_2";
+
+					if (execStat) {
+						runStat.updateStatOnConnection(iterateId, 1, 1, "row2");
+					}
+
+///////////////////////		
+
+					strBuffer_tLogRow_2 = new StringBuilder();
+
+					if (row2.msg != null) { //
+
+						strBuffer_tLogRow_2.append(String.valueOf(row2.msg));
+
+					} //
+
+					if (globalMap.get("tLogRow_CONSOLE") != null) {
+						consoleOut_tLogRow_2 = (java.io.PrintStream) globalMap.get("tLogRow_CONSOLE");
+					} else {
+						consoleOut_tLogRow_2 = new java.io.PrintStream(new java.io.BufferedOutputStream(System.out));
+						globalMap.put("tLogRow_CONSOLE", consoleOut_tLogRow_2);
+					}
+					consoleOut_tLogRow_2.println(strBuffer_tLogRow_2.toString());
+					consoleOut_tLogRow_2.flush();
+					nb_line_tLogRow_2++;
+//////
+
+//////                    
+
+///////////////////////    			
+
+					tos_count_tLogRow_2++;
+
+					/**
+					 * [tLogRow_2 main ] stop
+					 */
+
+					/**
+					 * [tLogRow_2 process_data_begin ] start
+					 */
+
+					currentComponent = "tLogRow_2";
+
+					/**
+					 * [tLogRow_2 process_data_begin ] stop
+					 */
+
+					/**
+					 * [tLogRow_2 process_data_end ] start
+					 */
+
+					currentComponent = "tLogRow_2";
+
+					/**
+					 * [tLogRow_2 process_data_end ] stop
+					 */
+
+					/**
+					 * [tFixedFlowInput_2 process_data_end ] start
+					 */
+
+					currentComponent = "tFixedFlowInput_2";
+
+					/**
+					 * [tFixedFlowInput_2 process_data_end ] stop
+					 */
+
+					/**
+					 * [tFixedFlowInput_2 end ] start
+					 */
+
+					currentComponent = "tFixedFlowInput_2";
+
+				}
+				globalMap.put("tFixedFlowInput_2_NB_LINE", 1);
+
+				ok_Hash.put("tFixedFlowInput_2", true);
+				end_Hash.put("tFixedFlowInput_2", System.currentTimeMillis());
+
+				/**
+				 * [tFixedFlowInput_2 end ] stop
+				 */
+
+				/**
+				 * [tLogRow_2 end ] start
+				 */
+
+				currentComponent = "tLogRow_2";
+
+//////
+//////
+				globalMap.put("tLogRow_2_NB_LINE", nb_line_tLogRow_2);
+
+///////////////////////    			
+
+				if (execStat) {
+					runStat.updateStat(resourceMap, iterateId, 2, 0, "row2");
+				}
+
+				ok_Hash.put("tLogRow_2", true);
+				end_Hash.put("tLogRow_2", System.currentTimeMillis());
+
+				/**
+				 * [tLogRow_2 end ] stop
+				 */
+
+			} // end the resume
+
+		} catch (java.lang.Exception e) {
+
+			TalendException te = new TalendException(e, currentComponent, globalMap);
+
+			throw te;
+		} catch (java.lang.Error error) {
+
+			runStat.stopThreadStat();
+
+			throw error;
+		} finally {
+
+			try {
+
+				/**
+				 * [tFixedFlowInput_2 finally ] start
+				 */
+
+				currentComponent = "tFixedFlowInput_2";
+
+				/**
+				 * [tFixedFlowInput_2 finally ] stop
+				 */
+
+				/**
+				 * [tLogRow_2 finally ] start
+				 */
+
+				currentComponent = "tLogRow_2";
+
+				/**
+				 * [tLogRow_2 finally ] stop
+				 */
+
+			} catch (java.lang.Exception e) {
+				// ignore
+			} catch (java.lang.Error error) {
+				// ignore
+			}
+			resourceMap = null;
+		}
+
+		globalMap.put("tFixedFlowInput_2_SUBPROCESS_STATE", 1);
 	}
 
 	public String resuming_logs_dir_path = null;
@@ -1007,6 +1410,6 @@ public class hello_job implements TalendJob {
 	ResumeUtil resumeUtil = null;
 }
 /************************************************************************************************
- * 31483 characters generated by Talend Open Studio for Data Integration on the
- * February 26, 2021 8:06:54 PM CET
+ * 41999 characters generated by Talend Open Studio for Data Integration on the
+ * February 26, 2021 8:20:17 PM CET
  ************************************************************************************************/
