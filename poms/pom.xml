@@ -11,6 +11,7 @@
   <modules>
     <module>jobs/process/hello_job_0.1</module>
     <module>code/routines</module>
+    <module>jobs/process/TOOLS/generate_contextfile_0.1</module>
   </modules>
   <properties>
     <talend.project.name>TEST_DOCKER</talend.project.name>
